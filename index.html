@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Air Quality Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <div class="logo">
+
+            <h1>🌍 Smart Air Quality Dashboard</h1>
+
+            <p>AI Powered Pollution Monitoring & Prediction System</p>
+
+        </div>
+
+        <div class="city-selector">
+
+            <label for="city">City</label>
+
+            <select id="city">
+
+                <option>Delhi</option>
+                <option>Faridabad</option>
+                <option>Gurugram</option>
+
+            </select>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= LIVE METRICS ================= -->
+
+    <section class="cards">
+
+        <div class="card aqi-card">
+
+            <h3>AQI</h3>
+
+            <h2 id="aqi-value">185</h2>
+
+            <span id="aqi-status">Moderate</span>
+
+        </div>
+
+        <div class="card">
+
+            <h3>PM2.5</h3>
+
+            <h2 id="pm25-value">72</h2>
+
+            <span>µg/m³</span>
+
+        </div>
+
+        <div class="card">
+
+            <h3>PM10</h3>
+
+            <h2 id="pm10-value">120</h2>
+
+            <span>µg/m³</span>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Temperature</h3>
+
+            <h2 id="temp-value">30°C</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Humidity</h3>
+
+            <h2 id="humidity-value">55%</h2>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= GRAPH ================= -->
+
+    <section class="graph-section">
+
+        <div class="section-header">
+
+            <h2>📈 Actual vs Predicted AQI</h2>
+
+            <div class="time-buttons">
+
+                <button class="active">+15 min</button>
+
+                <button>+30 min</button>
+
+                <button>+1 Hour</button>
+
+            </div>
+
+        </div>
+
+        <div class="chart-container">
+        <canvas id="aqiChart"></canvas>
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= DEVICE STATUS ================= -->
+
+    <section class="device-section">
+
+        <h2>🏠 Smart Device Status</h2>
+
+        <div class="device-grid">
+
+            <div class="device-card">
+
+                <h3>Air Purifier</h3>
+
+                <h2 id="purifier-status">🟢 ON</h2>
+
+            </div>
+
+            <div class="device-card">
+
+                <h3>Smart Windows</h3>
+
+                <h2 id="window-status">🔒 CLOSED</h2>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= HEALTH ADVISORY ================= -->
+
+    <section class="health-section">
+
+        <h2>⚠ Health Advisory</h2>
+
+        <div id="warning-banner">
+
+            Air Quality is Moderate.
+
+            Sensitive people should avoid prolonged outdoor activity.
+
+        </div>
+
+        <div class="risk-box">
+
+            <div class="risk-title">
+
+                Health Risk Meter
+
+            </div>
+
+            <progress id="risk-meter" value="45" max="100"></progress>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= ACTIVITY LOG ================= -->
+
+    <section class="terminal-section">
+
+        <h2>💻 Live Activity Log</h2>
+
+        <div class="terminal">
+
+            <p>[18:42] AQI Updated</p>
+
+            <p>[18:43] AI Prediction Generated</p>
+
+            <p>[18:44] Air Purifier Turned ON</p>
+
+            <p>[18:45] Smart Windows Closed</p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= DEMO PANEL ================= -->
+
+    <section class="demo-section">
+
+        <h2>🎛 Presentation Demo</h2>
+
+        <p>Simulate AQI Level</p>
+
+        <input type="range"
+               min="0"
+               max="500"
+               value="185"
+               id="aqi-slider">
+
+        <h3>
+
+            AQI :
+
+            <span id="slider-value">
+
+                185
+
+            </span>
+
+        </h3>
+
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

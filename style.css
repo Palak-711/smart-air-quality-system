@@ -1,0 +1,627 @@
+/*==================================================
+                GOOGLE FONT
+==================================================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/*==================================================
+                RESET
+==================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:#0F172A;
+
+    color:white;
+
+    padding:30px;
+
+    min-height:100vh;
+}
+
+.container{
+
+    max-width:1400px;
+
+    margin:auto;
+}
+
+
+/*==================================================
+                    HEADER
+==================================================*/
+
+header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    margin-bottom:35px;
+}
+
+.logo h1{
+
+    font-size:34px;
+
+    margin-bottom:8px;
+}
+
+.logo p{
+
+    color:#94A3B8;
+
+    font-size:15px;
+}
+
+
+/*==================================================
+                CITY SELECTOR
+==================================================*/
+
+.city-selector{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.city-selector label{
+
+    font-weight:500;
+
+    color:#CBD5E1;
+}
+
+.city-selector select{
+
+    background:#1E293B;
+
+    color:white;
+
+    border:none;
+
+    outline:none;
+
+    padding:10px 18px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.3s;
+}
+
+.city-selector select:hover{
+
+    background:#334155;
+}
+
+
+/*==================================================
+                LIVE METRIC CARDS
+==================================================*/
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+
+    gap:22px;
+
+    margin-bottom:35px;
+}
+
+.card{
+
+    background:#1E293B;
+
+    padding:22px;
+
+    border-radius:18px;
+
+    transition:.3s;
+
+    border:1px solid #334155;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.35);
+}
+
+.card:hover{
+
+    transform:translateY(-7px);
+
+    box-shadow:0 20px 40px rgba(0,0,0,.45);
+}
+
+.card h3{
+
+    color:#94A3B8;
+
+    margin-bottom:15px;
+
+    font-size:18px;
+}
+
+.card h2{
+
+    font-size:38px;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+}
+
+.card span{
+
+    color:#CBD5E1;
+
+    font-size:15px;
+}
+
+
+/* AQI CARD */
+
+.aqi-card{
+
+    border-left:6px solid #22C55E;
+}
+
+.aqi-card h2{
+
+    color:#22C55E;
+}
+
+
+/*==================================================
+                GRAPH SECTION
+==================================================*/
+
+.graph-section{
+
+    background:#1E293B;
+
+    margin-bottom:35px;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    border:1px solid #334155;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.35);
+}
+
+.section-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    margin-bottom:25px;
+}
+
+.section-header h2{
+
+    font-size:24px;
+}
+
+
+/*==================================================
+            PREDICTION BUTTONS
+==================================================*/
+
+.time-buttons{
+
+    display:flex;
+
+    gap:12px;
+}
+
+.time-buttons button{
+
+    padding:10px 20px;
+
+    background:#2563EB;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.3s;
+}
+
+.time-buttons button:hover{
+
+    background:#1D4ED8;
+
+    transform:translateY(-2px);
+}
+
+.time-buttons .active{
+
+    background:#38BDF8;
+}
+
+
+/*==================================================
+                    CHART
+==================================================*/
+
+.chart-container{
+
+    position:relative;
+
+    width:100%;
+
+    height:420px;
+}
+
+#aqiChart{
+
+    width:100% !important;
+
+    height:100% !important;
+}
+/*==================================================
+                DEVICE SECTION
+==================================================*/
+
+.device-section{
+    margin-top:35px;
+    margin-bottom:35px;
+}
+
+.device-section h2{
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+.device-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.device-card{
+
+    background:#1E293B;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    border:1px solid #334155;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.35);
+
+    transition:.3s;
+}
+
+.device-card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 35px rgba(0,0,0,.45);
+}
+
+.device-card h3{
+
+    color:#94A3B8;
+
+    margin-bottom:18px;
+}
+
+.device-card h2{
+
+    font-size:32px;
+}
+
+
+/*==================================================
+                HEALTH SECTION
+==================================================*/
+
+.bottom-grid{
+
+display:grid;
+
+grid-template-columns:2fr 1fr;
+
+gap:25px;
+
+margin-bottom:35px;
+
+} 
+.health-section h2{
+
+    margin-bottom:20px;
+}
+
+#warning-banner{
+
+    background:#F59E0B;
+
+    color:#111827;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    line-height:1.7;
+
+    margin-bottom:25px;
+}
+
+.risk-box{
+
+    background:#1E293B;
+
+    padding:22px;
+
+    border-radius:18px;
+
+    border:1px solid #334155;
+}
+
+.risk-title{
+
+    margin-bottom:15px;
+
+    font-size:18px;
+
+    color:#CBD5E1;
+}
+
+#risk-meter{
+
+    width:100%;
+
+    height:18px;
+}
+
+
+/*==================================================
+                TERMINAL
+==================================================*/
+
+.terminal-section{
+
+    margin-bottom:35px;
+}
+
+.terminal-section h2{
+
+    margin-bottom:20px;
+}
+
+.terminal{
+
+    background:#050816;
+
+    color:#22C55E;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    border:1px solid #334155;
+
+    font-family:Consolas,monospace;
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+    line-height:2;
+}
+
+.terminal p{
+
+    margin-bottom:8px;
+}
+
+
+/*==================================================
+                DEMO PANEL
+==================================================*/
+
+.demo-section{
+
+    background:#1E293B;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    border:1px solid #334155;
+
+    margin-bottom:30px;
+}
+
+.demo-section h2{
+
+    margin-bottom:15px;
+}
+
+.demo-section p{
+
+    margin-bottom:15px;
+
+    color:#CBD5E1;
+}
+
+#aqi-slider{
+
+    width:100%;
+
+    cursor:pointer;
+
+    margin-bottom:18px;
+
+    accent-color:#38BDF8;
+}
+
+.demo-section h3{
+
+    color:#38BDF8;
+}
+
+
+/*==================================================
+                BUTTONS
+==================================================*/
+
+button{
+
+    font-family:'Poppins',sans-serif;
+}
+
+
+/*==================================================
+                SCROLLBAR
+==================================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+}
+
+::-webkit-scrollbar-track{
+
+    background:#0F172A;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#475569;
+
+    border-radius:20px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#64748B;
+}
+
+
+/*==================================================
+                RESPONSIVE
+==================================================*/
+
+@media(max-width:1000px){
+
+header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+}
+
+.section-header{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:20px;
+}
+
+.time-buttons{
+
+    flex-wrap:wrap;
+}
+
+}
+
+@media(max-width:768px){
+
+body{
+
+    padding:18px;
+}
+
+.logo h1{
+
+    font-size:28px;
+}
+
+.card h2{
+
+    font-size:32px;
+}
+
+.section-header h2{
+
+    font-size:22px;
+}
+
+.device-card h2{
+
+    font-size:28px;
+}
+
+}
+
+
+/*==================================================
+                ANIMATIONS
+==================================================*/
+
+.card,
+.device-card,
+.graph-section,
+.health-section,
+.demo-section{
+
+    animation:fadeUp .6s ease;
+}
+
+@keyframes fadeUp{
+
+from{
+
+    opacity:0;
+
+    transform:translateY(20px);
+}
+
+to{
+
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+}
