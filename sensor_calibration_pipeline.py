@@ -29,9 +29,9 @@ print("="*70)
 # 1. DATA INGESTION & AGGREGATION
 # ==========================================
 city_files = [
-    'delhi_aqi_2022_2023_cleaned (1).csv',
-    'faridabad_aqi_2022_2023_cleaned (1).csv',
-    'gurugram_aqi_2022_2023_cleaned (1).csv'
+    'data/cleaned/delhi_aqi_2022_2023_cleaned.csv',
+    'data/cleaned/faridabad_aqi_2022_2023_cleaned.csv',
+    'data/cleaned/gurugram_aqi_2022_2023_cleaned.csv'
 ]
 
 data_frames = []
