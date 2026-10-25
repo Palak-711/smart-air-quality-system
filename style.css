@@ -1152,3 +1152,370 @@ border-color:var(--primary);
     text-align:center;
     gap:12px;
 }
+
+/*==========================================================
+        STYLE FIXES  (rules for HTML classes that had no CSS)
+        Visual language unchanged: same colors, cards, radii
+==========================================================*/
+
+/* ---------- HEADER (HTML uses header-left / city-box / update-box) ---------- */
+
+.header-left h1{
+    font-size:2.4rem;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.header-left p{
+    color:var(--muted);
+    font-size:1rem;
+}
+
+.city-box,
+.update-box{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.city-box label,
+.update-box span{
+    color:var(--muted);
+    font-size:.9rem;
+}
+
+.city-box select{
+    width:170px;
+    padding:12px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    color:white;
+    outline:none;
+    font-size:15px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.city-box select:hover,
+.city-box select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(76,201,240,.15);
+}
+
+.update-box h4{
+    font-weight:600;
+    min-width:270px;
+    font-variant-numeric:tabular-nums;   /* stops the per-second clock from jittering */
+}
+
+
+/* ---------- AQI CARD ---------- */
+
+.gauge-wrapper{
+    margin:10px 0 16px;
+}
+
+#aqiStatus{
+    font-size:1.15rem;
+    font-weight:600;
+}
+
+#aqiTrend{
+    margin-top:8px;
+    font-size:.88rem;
+    color:var(--muted);
+    text-align:center;
+}
+
+.card h2{
+    font-variant-numeric:tabular-nums;
+}
+
+
+/* ---------- GRAPH HEADER ---------- */
+
+.graph-header h2{
+    font-size:1.35rem;
+    margin-bottom:6px;
+}
+
+.graph-header p{
+    color:var(--muted);
+    font-size:.92rem;
+}
+
+.graph-header p strong{
+    font-weight:700;
+}
+
+.graph-buttons .active{
+    box-shadow:0 0 0 3px rgba(76,201,240,.22);
+}
+
+.graph-buttons button:focus-visible,
+#simulateBtn:focus-visible{
+    outline:2px solid var(--primary);
+    outline-offset:2px;
+}
+
+
+/* ---------- AQI HISTORY + TODAY'S SUMMARY ---------- */
+
+.history-card h2,
+.summary-card h2{
+    font-size:1.15rem;
+    margin-bottom:6px;
+}
+
+.history-card p{
+    color:var(--muted);
+    font-size:.88rem;
+    margin-bottom:16px;
+}
+
+.summary-item strong{
+    font-variant-numeric:tabular-nums;
+}
+
+
+/* ---------- SMART DEVICES ---------- */
+
+.device-section h2{
+    font-size:1.35rem;
+}
+
+.device-card h3{
+    color:var(--muted);
+    font-size:1rem;
+    font-weight:500;
+}
+
+.device-card p{
+    font-size:.9rem;
+    line-height:1.5;
+}
+
+
+/* ---------- HEALTH ADVISORY ---------- */
+
+.risk-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+.risk-header span{
+    color:var(--muted);
+    font-weight:500;
+}
+
+.health-text{
+    margin-top:16px;
+    color:#cbd5e1;
+    line-height:1.7;
+}
+
+
+/* ---------- PRESENTATION DEMO ---------- */
+
+.demo-values{
+    display:flex;
+    gap:14px;
+    margin:6px 0 18px;
+}
+
+.demo-values div{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:12px 14px;
+    background:#16253a;
+    border-radius:12px;
+    text-align:center;
+}
+
+.demo-values span{
+    color:var(--muted);
+    font-size:.82rem;
+}
+
+.demo-values strong{
+    font-size:1.5rem;
+    font-variant-numeric:tabular-nums;
+}
+
+/* slider: gradient track in the AQI colour scale */
+#aqi-slider{
+    -webkit-appearance:none;
+    appearance:none;
+    height:8px;
+    border-radius:20px;
+    cursor:pointer;
+    background:linear-gradient(to right,
+        #22c55e 0%,
+        #84cc16 10%,
+        #facc15 20%,
+        #fb923c 40%,
+        #ef4444 60%,
+        #991b1b 100%);
+}
+
+#aqi-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:#fff;
+    border:3px solid var(--primary2);
+    box-shadow:0 2px 8px rgba(0,0,0,.45);
+    transition:transform .2s;
+}
+
+#aqi-slider::-webkit-slider-thumb:hover{
+    transform:scale(1.15);
+}
+
+#aqi-slider::-moz-range-thumb{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#fff;
+    border:3px solid var(--primary2);
+    box-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+
+#aqi-slider::-moz-range-track{
+    background:transparent;
+}
+
+#simulateBtn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(90deg,var(--primary2),#2563eb);
+    color:#fff;
+    font-family:inherit;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.25s;
+    box-shadow:0 8px 20px rgba(58,166,255,.25);
+}
+
+#simulateBtn:hover:not(:disabled){
+    transform:translateY(-2px);
+    filter:brightness(1.1);
+    box-shadow:0 12px 26px rgba(58,166,255,.35);
+}
+
+#simulateBtn:active:not(:disabled){
+    transform:translateY(0);
+}
+
+
+/* ---------- LIVE ACTIVITY LOG ---------- */
+
+.terminal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.terminal-header h2{
+    margin-bottom:0;
+}
+
+.live-status{
+    padding:6px 14px;
+    border-radius:999px;
+    background:rgba(74,222,128,.10);
+    border:1px solid rgba(74,222,128,.28);
+    color:#4ade80;
+    font-size:.82rem;
+    font-weight:600;
+    letter-spacing:.08em;
+    animation:livePulse 1.8s ease-in-out infinite;
+}
+
+.terminal p{
+    padding-left:12px;
+    border-left:2px solid transparent;
+}
+
+/* newest entry stands out, older ones fade slightly */
+.terminal p:first-child{
+    color:#86efac;
+    border-left-color:#4ade80;
+    background:rgba(74,222,128,.06);
+}
+
+.terminal p:nth-child(n+4){
+    opacity:.72;
+}
+
+
+/* ---------- EXTRA POLISH ---------- */
+
+@keyframes livePulse{
+    0%,100%{opacity:1;}
+    50%{opacity:.45;}
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(16px);}
+}
+
+/* "backwards" fill so the hover lift still works after the entrance ends */
+.dashboard-header,
+.card,
+.graph-section,
+.history-card,
+.summary-card,
+.device-section,
+.health-section,
+.demo-section,
+.terminal-section{
+    animation:fadeUp .6s ease backwards;
+}
+
+.cards .card:nth-child(2){animation-delay:.05s;}
+.cards .card:nth-child(3){animation-delay:.10s;}
+.cards .card:nth-child(4){animation-delay:.15s;}
+.cards .card:nth-child(5){animation-delay:.20s;}
+.graph-section{animation-delay:.15s;}
+.summary-card{animation-delay:.2s;}
+
+@media(max-width:768px){
+
+    .header-left h1{
+        font-size:1.8rem;
+    }
+
+    .header-right{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:18px;
+    }
+
+    .update-box h4{
+        min-width:0;
+    }
+
+    .demo-values{
+        flex-direction:column;
+    }
+
+}
+
+@media(prefers-reduced-motion:reduce){
+    *{
+        animation:none !important;
+        transition:none !important;
+    }
+}
