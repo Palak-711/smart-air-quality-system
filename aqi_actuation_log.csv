@@ -1,0 +1,4 @@
+city,predicted_next_hour_aqi,previous_status,recommended_status,simulated_action,decision_reason,forecast_timestamp
+Delhi,161.83130844288965,OFF,ON,TURN ON,Predicted AQI reached ON threshold,2023-12-31 23:00:00
+Faridabad,157.96382698627704,OFF,ON,TURN ON,Predicted AQI reached ON threshold,2023-12-31 23:00:00
+Gurugram,149.96816561943027,OFF,ON,TURN ON,Predicted AQI reached ON threshold,2023-12-31 23:00:00
