@@ -2,161 +2,622 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Smart Air Quality Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+          href="style.css">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <!-- ================= HEADER ================= -->
-    <header>
-        <div class="logo">
-            <h1>🌍 Smart Air Quality Dashboard</h1>
-            <p>AI Powered Pollution Monitoring & Prediction System</p>
-        </div>
-        <div class="city-selector">
-            <label for="city">City</label>
+<!-- ======================================================
+                        HEADER
+======================================================= -->
+
+<header class="dashboard-header">
+
+    <div class="header-left">
+
+        <h1>🌍 Smart Air Quality Dashboard</h1>
+
+        <p>
+            AI Powered Pollution Monitoring & Prediction System
+        </p>
+
+    </div>
+
+    <div class="header-right">
+
+        <div class="city-box">
+
+            <label>City</label>
+
             <select id="city">
+
                 <option>Delhi</option>
+
                 <option>Faridabad</option>
+
                 <option>Gurugram</option>
+
             </select>
-        </div>
-    </header>
 
-    <!-- ================= LIVE METRICS ================= -->
-    <section class="cards">
-        <div class="card aqi-card">
-            <h3>AQI</h3>
-            <h2 id="aqi-value">185</h2>
-            <span id="aqi-status">Moderate</span>
         </div>
-        <div class="card">
-            <h3>PM2.5</h3>
-            <h2 id="pm25-value">72</h2>
-            <span>µg/m³</span>
-        </div>
-        <div class="card">
-            <h3>PM10</h3>
-            <h2 id="pm10-value">120</h2>
-            <span>µg/m³</span>
-        </div>
-        <div class="card">
-            <h3>Temperature</h3>
-            <h2 id="temp-value">30°C</h2>
-        </div>
-        <div class="card">
-            <h3>Humidity</h3>
-            <h2 id="humidity-value">55%</h2>
-        </div>
-    </section>
 
-    <!-- ================= IOT HARDWARE TELEMETRY ================= -->
-    <section class="iot-section">
-        <h2>📡 IoT Sensor Node Telemetry (ESP32)</h2>
-        <div class="iot-grid">
-            <div class="iot-card">
-                <h3>Hardware Node ID</h3>
-                <h2 id="node-id">ESP32_NODE_04</h2>
-                <span>Status: <strong style="color: #22C55E;">Online 🟢</strong></span>
-            </div>
-            <div class="iot-card">
-                <h3>Wi-Fi Signal (RSSI)</h3>
-                <h2 id="wifi-rssi">-68 dBm</h2>
-                <span>Signal Strength: Good</span>
-            </div>
-            <div class="iot-card">
-                <h3>DCAE Calibration Noise Filter</h3>
-                <h2 id="calibration-status">Active ⚡</h2>
-                <span id="noise-reduced">Raw Noise Reduced: 14.2%</span>
-            </div>
-            <div class="iot-card">
-                <h3>Battery / Power</h3>
-                <h2 id="power-status">4.9V</h2>
-                <span>Source: USB / Solar</span>
-            </div>
-        </div>
-    </section>
+        <div class="update-box">
 
-    <!-- ================= GRAPH ================= -->
-    <section class="graph-section">
-        <div class="section-header">
-            <h2>📈 Actual vs Predicted AQI</h2>
-            <div class="time-buttons">
-                <button class="active">+15 min</button>
-                <button>+30 min</button>
-                <button>+1 Hour</button>
-            </div>
-        </div>
-        <div class="chart-container">
-            <canvas id="aqiChart"></canvas>
-        </div>
-    </section>
+            <span>Last Updated</span>
 
-    <!-- ================= DEVICE STATUS ================= -->
-    <section class="device-section">
-        <h2>🏠 Smart Device Status</h2>
+            <h4 id="lastUpdated">
+
+                24 Oct 2026 • 06:30 PM
+
+            </h4>
+
+        </div>
+
+    </div>
+
+</header>
+
+<!-- ======================================================
+                    METRIC CARDS
+======================================================= -->
+
+<section class="cards">
+
+    <!-- AQI -->
+
+    <div class="card aqi-card">
+
+        <h3>Air Quality Index</h3>
+
+        <div class="gauge-wrapper">
+
+            <div class="aqi-gauge">
+
+                <span id="aqiValue">
+
+                    185
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <h4 id="aqiStatus">
+
+            Moderate
+
+        </h4>
+
+        <p id="aqiTrend">
+
+            ↑ 12 AQI higher than yesterday
+
+        </p>
+
+    </div>
+
+    <!-- PM2.5 -->
+
+    <div class="card">
+
+        <h3>PM2.5</h3>
+
+        <h2 id="pm25">
+
+            72
+
+        </h2>
+
+        <span>µg/m³</span>
+
+    </div>
+
+    <!-- PM10 -->
+
+    <div class="card">
+
+        <h3>PM10</h3>
+
+        <h2 id="pm10">
+
+            120
+
+        </h2>
+
+        <span>µg/m³</span>
+
+    </div>
+
+    <!-- Temperature -->
+
+    <div class="card">
+
+        <h3>Temperature</h3>
+
+        <h2 id="temperature">
+
+            30°C
+
+        </h2>
+
+    </div>
+
+    <!-- Humidity -->
+
+    <div class="card">
+
+        <h3>Humidity</h3>
+
+        <h2 id="humidity">
+
+            55%
+
+        </h2>
+
+    </div>
+
+</section>
+
+<!-- ======================================================
+            GRAPH + INSIGHTS
+======================================================= -->
+
+<section class="top-grid">
+
+<!-- ================= GRAPH ================= -->
+
+<div class="graph-section">
+
+    <div class="graph-header">
+
+        <div>
+
+            <h2>
+
+                📈 AQI Forecast
+
+            </h2>
+
+            <p>
+
+                AI Prediction :
+                <strong id="predictionIncrease">
+
+                    +18 AQI
+
+                </strong>
+
+            </p>
+
+        </div>
+
+        <div class="graph-buttons">
+
+            <button class="active">
+
+                +15 min
+
+            </button>
+
+            <button>
+
+                +30 min
+
+            </button>
+
+            <button>
+
+                +1 Hour
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="chart-container">
+
+        <canvas id="aqiChart"></canvas>
+
+    </div>
+
+</div>
+
+<!-- ================= AQI INSIGHTS ================= -->
+
+<div class="insight-card">
+
+    <!-- AQI HISTORY -->
+
+    <div class="history-card">
+
+        <h2>
+
+            🗓 AQI History
+
+        </h2>
+
+        <p>
+
+            Last 30 Days
+
+        </p>
+
+        <div class="heatmap">
+
+            <!-- ROW 1 -->
+
+            <div class="level-good"></div>
+            <div class="level-good"></div>
+            <div class="level-moderate"></div>
+            <div class="level-poor"></div>
+            <div class="level-good"></div>
+
+            <!-- ROW 2 -->
+
+            <div class="level-good"></div>
+            <div class="level-moderate"></div>
+            <div class="level-good"></div>
+            <div class="level-severe"></div>
+            <div class="level-good"></div>
+
+            <!-- ROW 3 -->
+
+            <div class="level-good"></div>
+            <div class="level-good"></div>
+            <div class="level-moderate"></div>
+            <div class="level-poor"></div>
+            <div class="level-good"></div>
+
+            <!-- ROW 4 -->
+
+            <div class="level-good"></div>
+            <div class="level-poor"></div>
+            <div class="level-severe"></div>
+            <div class="level-good"></div>
+            <div class="level-good"></div>
+
+            <!-- ROW 5 -->
+
+            <div class="level-good"></div>
+            <div class="level-moderate"></div>
+            <div class="level-good"></div>
+            <div class="level-good"></div>
+            <div class="level-poor"></div>
+
+            <!-- ROW 6 -->
+
+            <div class="level-good"></div>
+            <div class="level-good"></div>
+            <div class="level-moderate"></div>
+            <div class="level-severe"></div>
+            <div class="level-good"></div>
+
+        </div>
+
+        <div class="legend">
+
+    <span>
+        <div class="good"></div>
+        Good
+    </span>
+
+    <span>
+        <div class="moderate"></div>
+        Moderate
+    </span>
+
+    <span>
+        <div class="poor"></div>
+        Poor
+    </span>
+
+    <span>
+        <div class="severe"></div>
+        Severe
+    </span>
+
+</div>
+    </div>
+        <!-- ================= TODAY SUMMARY ================= -->
+
+    <div class="summary-card">
+
+        <h2>
+
+            📊 Today's Summary
+
+        </h2>
+
+        <div class="summary-item">
+
+            <span>Highest AQI</span>
+
+            <strong id="highestAQI">212</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Lowest AQI</span>
+
+            <strong id="lowestAQI">148</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Average AQI</span>
+
+            <strong id="averageAQI">176</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Trend</span>
+
+            <strong id="trend">↑ Improving</strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- ======================================================
+                    SECOND ROW
+======================================================= -->
+
+<section class="bottom-grid">
+
+    <!-- ================= SMART DEVICES ================= -->
+
+    <div class="device-section">
+
+        <h2>🏠 Smart Devices</h2>
+
         <div class="device-grid">
+
             <div class="device-card">
+
                 <h3>Air Purifier</h3>
-                <h2 id="purifier-status">🟢 ON</h2>
+
+                <div class="device-status on">
+
+                    <span class="status-dot"></span>
+
+                    <span id="purifierStatus">
+
+                        Running
+
+                    </span>
+
+                </div>
+
+                <p>
+
+                    Automatic purification enabled
+
+                </p>
+
             </div>
+
             <div class="device-card">
+
                 <h3>Smart Windows</h3>
-                <h2 id="window-status">🔒 CLOSED</h2>
-            </div>
-        </div>
-    </section>
 
-    <!-- ================= HEALTH ADVISORY ================= -->
-    <section class="health-section">
-        <h2>⚠ Health Advisory</h2>
-        <div id="warning-banner">
-            Air Quality is Moderate. Sensitive people should avoid prolonged outdoor activity.
-        </div>
-        <div class="risk-box">
-            <div class="risk-title">
-                Health Risk Meter
-            </div>
-            <progress id="risk-meter" value="45" max="100"></progress>
-        </div>
-    </section>
+                <div class="device-status closed">
 
-    <!-- ================= ACTIVITY LOG ================= -->
-    <section class="terminal-section">
+                    <span class="status-dot"></span>
+
+                    <span id="windowStatus">
+
+                        Closed
+
+                    </span>
+
+                </div>
+
+                <p>
+
+                    Outdoor pollution protection active
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= RIGHT SIDE ================= -->
+
+    <div class="right-column">
+
+        <!-- Health -->
+
+        <div class="health-section">
+
+            <h2>❤️ Health Advisory</h2>
+
+            <div id="warning-banner">
+
+                Moderate Air Quality
+
+            </div>
+
+            <div class="risk-box">
+
+                <div class="risk-header">
+
+                    <span>Health Risk</span>
+
+                    <strong id="riskLabel">
+
+                        Moderate
+
+                    </strong>
+
+                </div>
+
+                <progress
+
+                    id="risk-meter"
+
+                    value="45"
+
+                    max="100">
+
+                </progress>
+
+            </div>
+
+            <p class="health-text">
+
+                Sensitive individuals should avoid prolonged outdoor exposure.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- Presentation Demo -->
+
+        <div class="demo-section">
+
+            <h2>🎛 Presentation Demo</h2>
+
+            <p>
+
+                Simulate AQI for Project Demonstration
+
+            </p>
+
+            <input
+
+                type="range"
+
+                id="aqi-slider"
+
+                min="0"
+
+                max="500"
+
+                value="185">
+
+            <div class="demo-values">
+
+                <div>
+
+                    <span>Current AQI</span>
+
+                    <strong id="sliderValue">
+
+                        185
+
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <span>Forecast</span>
+
+                    <strong id="forecastValue">
+
+                        +18
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <button id="simulateBtn">
+
+                Run Simulation
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+                LIVE ACTIVITY LOG
+======================================================= -->
+
+<section class="terminal-section">
+
+    <div class="terminal-header">
+
         <h2>💻 Live Activity Log</h2>
-        <div class="terminal" id="terminal-log">
-            <p>[18:42] AQI Updated</p>
-            <p>[18:43] AI Prediction Generated</p>
-            <p>[18:44] Air Purifier Turned ON</p>
-            <p>[18:45] Smart Windows Closed</p>
-        </div>
-    </section>
 
-    <!-- ================= DEMO PANEL ================= -->
-    <section class="demo-section">
-        <h2>🎛 Presentation Demo</h2>
-        <p>Simulate AQI Level</p>
-        <input type="range"
-               min="0"
-               max="500"
-               value="185"
-               id="aqi-slider">
-        <h3>
-            AQI :
-            <span id="slider-value">
-                185
-            </span>
-        </h3>
-    </section>
+        <span class="live-status">
+
+            ● LIVE
+
+        </span>
+
+    </div>
+
+    <div class="terminal" id="activityLog">
+
+        <p>[18:42] AQI updated to 185</p>
+
+        <p>[18:43] AI generated +30 minute prediction</p>
+
+        <p>[18:44] Air Purifier turned ON automatically</p>
+
+        <p>[18:45] Smart Windows CLOSED</p>
+
+        <p>[18:46] Dashboard synchronized</p>
+
+    </div>
+
+</section>
 
 </div>
 
 <script src="script.js"></script>
+
 </body>
+
 </html>
