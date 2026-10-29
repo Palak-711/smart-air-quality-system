@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "author": "Smart AQI team",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": -110,
+      "left": -130,
+      "attrs": {
+        "temperature": "29",
+        "humidity": "55"
+      }
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot1",
+      "top": -110,
+      "left": 20,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay1",
+      "top": -20,
+      "left": 260,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo1",
+      "top": 120,
+      "left": 260,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_ok",
+      "top": -110,
+      "left": 170,
+      "attrs": {
+        "color": "green",
+        "label": "Purifier OFF"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_low",
+      "top": -110,
+      "left": 220,
+      "attrs": {
+        "color": "blue",
+        "label": "Purifier LOW"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_high",
+      "top": -110,
+      "left": 270,
+      "attrs": {
+        "color": "red",
+        "label": "Purifier HIGH"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -60,
+      "left": 160,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": -40,
+      "left": 210,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": -20,
+      "left": 260,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX0",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX0",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "dht1:VCC",
+      "esp:3V3",
+      "red",
+      []
+    ],
+    [
+      "dht1:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "dht1:SDA",
+      "esp:D4",
+      "green",
+      []
+    ],
+    [
+      "pot1:VCC",
+      "esp:3V3",
+      "red",
+      []
+    ],
+    [
+      "pot1:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "pot1:SIG",
+      "esp:D34",
+      "orange",
+      []
+    ],
+    [
+      "relay1:VCC",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "relay1:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "relay1:IN",
+      "esp:D26",
+      "purple",
+      []
+    ],
+    [
+      "servo1:V+",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "servo1:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "servo1:PWM",
+      "esp:D18",
+      "blue",
+      []
+    ],
+    [
+      "esp:D33",
+      "r1:1",
+      "green",
+      []
+    ],
+    [
+      "r1:2",
+      "led_ok:A",
+      "green",
+      []
+    ],
+    [
+      "led_ok:C",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "esp:D25",
+      "r2:1",
+      "blue",
+      []
+    ],
+    [
+      "r2:2",
+      "led_low:A",
+      "blue",
+      []
+    ],
+    [
+      "led_low:C",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "esp:D27",
+      "r3:1",
+      "red",
+      []
+    ],
+    [
+      "r3:2",
+      "led_high:A",
+      "red",
+      []
+    ],
+    [
+      "led_high:C",
+      "esp:GND.1",
+      "black",
+      []
+    ]
+  ],
+  "dependencies": {}
+}
