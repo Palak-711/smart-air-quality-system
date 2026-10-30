@@ -5,10 +5,11 @@ from pathlib import Path
 # Project paths
 BASE_DIR = Path(__file__).resolve().parent
 
-RAW_DIR = BASE_DIR / "data" / "raw"
-CLEANED_DIR = BASE_DIR / "data" / "cleaned"
+INPUT_DIR = BASE_DIR / "data" / "cleaned"
 
-CLEANED_DIR.mkdir(parents=True, exist_ok=True)
+OUTPUT_DIR = BASE_DIR / "data" / "cleaned_gap_filled"
+
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Pollutant columns
 POLLUTANTS = ["pm25", "pm10", "no2", "so2", "co", "o3"]
@@ -21,6 +22,7 @@ def clean_city_data(filepath, city_name):
 
     print(f"\nProcessing {city_name}...")
 
+    # Read cleaned dataset
     df = pd.read_csv(filepath)
 
     # Convert timestamp
@@ -34,6 +36,8 @@ def clean_city_data(filepath, city_name):
     df = df.sort_values("timestamp")
 
     # Remove duplicate timestamps
+    duplicate_count = df["timestamp"].duplicated().sum()
+
     df = df.drop_duplicates(
         subset=["timestamp"], keep="first"
     )
@@ -50,16 +54,23 @@ def clean_city_data(filepath, city_name):
         freq="h"
     )
 
+    original_count = len(df)
+
+    # Insert missing timestamps
     df = df.reindex(full_index)
 
     df.index.name = "timestamp"
 
-    # Mark inserted records
+    # Identify inserted records
     df["data_source"] = df["data_source"].fillna(
         "inserted"
     )
 
-    # Convert pollutants to numeric
+    inserted_count = (
+        df["data_source"] == "inserted"
+    ).sum()
+
+    # Convert pollutant columns to numeric
     for col in POLLUTANTS:
 
         if col in df.columns:
@@ -120,42 +131,50 @@ def clean_city_data(filepath, city_name):
         df["day_of_week"] >= 5
     ).astype(int)
 
-    return df
+    return df, original_count, inserted_count, duplicate_count
 
 
+# Main execution
 if __name__ == "__main__":
 
     for city in CITIES:
 
-        raw_path = RAW_DIR / f"{city}_aqi_.csv"
+        input_path = (
+            INPUT_DIR /
+            f"{city}_aqi_2022_2023_cleaned.csv"
+        )
 
-        if raw_path.exists():
+        if input_path.exists():
 
-            cleaned_df = clean_city_data(
-                raw_path, city.title()
+            cleaned_df, original_count, inserted_count, duplicate_count = (
+                clean_city_data(input_path, city.title())
             )
 
+            # Save final output separately
             output_path = (
-                CLEANED_DIR / f"{city}_cleaned.csv"
+                OUTPUT_DIR / f"{city}_cleaned.csv"
             )
 
             cleaned_df.reset_index().to_csv(
                 output_path, index=False
             )
 
-            print(f"Saved: {output_path}")
+            print(f"\nSaved: {output_path}")
 
-            print(
-                f"Total records: {len(cleaned_df)}"
-            )
+            print("Original records:", original_count)
 
-            print(
-                f"Inserted records: "
-                f"{(cleaned_df['data_source'] == 'inserted').sum()}"
-            )
+            print("Final records:", len(cleaned_df))
+
+            print("Inserted timestamps:", inserted_count)
+
+            print("Duplicates removed:", duplicate_count)
+
+            print("\nRemaining missing pollutant values:")
+
+            print(cleaned_df[POLLUTANTS].isnull().sum())
 
         else:
 
-            print(f"File not found: {raw_path}")
+            print(f"File not found: {input_path}")
 
     print("\nData cleaning completed!")
