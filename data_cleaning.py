@@ -1,72 +1,161 @@
-from pathlib import Path
 import pandas as pd
+import numpy as np
+from pathlib import Path
 
-ROOT_DIR = Path(__file__).resolve().parent
-RAW_DIR = ROOT_DIR / "data" / "raw"
-OUTPUT_DIR = ROOT_DIR / "data" / "cleaned" / "generated"
+# Project paths
+BASE_DIR = Path(__file__).resolve().parent
 
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+RAW_DIR = BASE_DIR / "data" / "raw"
+CLEANED_DIR = BASE_DIR / "data" / "cleaned"
 
-COLUMNS = ["co", "no2", "o3", "pm10", "pm25", "so2", "aqi"]
+CLEANED_DIR.mkdir(parents=True, exist_ok=True)
 
-CITIES = {
-    "Delhi": "delhi_aqi_.csv",
-    "Faridabad": "faridabad_aqi_.csv",
-    "Gurugram": "gurugram_aqi_.csv",
-}
+# Pollutant columns
+POLLUTANTS = ["pm25", "pm10", "no2", "so2", "co", "o3"]
 
-
-def clean_data(city, filename):
-    input_path = RAW_DIR / filename
-
-    if not input_path.exists():
-        raise FileNotFoundError(f"File not found: {input_path}")
-
-    df = pd.read_csv(input_path)
-
-    missing = [col for col in COLUMNS if col not in df.columns]
-    if missing:
-        raise ValueError(f"{city}: Missing columns {missing}")
-
-    outliers = pd.Series(False, index=df.index)
-
-    for col in COLUMNS:
-        values = pd.to_numeric(df[col], errors="coerce")
-        q1 = values.quantile(0.25)
-        q3 = values.quantile(0.75)
-        iqr = q3 - q1
-
-        lower = q1 - 1.5 * iqr
-        upper = q3 + 1.5 * iqr
-
-        outliers |= ((values < lower) | (values > upper)).fillna(False)
-
-    cleaned_df = df.loc[~outliers].copy()
-
-    output_file = OUTPUT_DIR / f"{city.lower()}_aqi_2022_2023_cleaned.csv"
-    cleaned_df.to_csv(output_file, index=False)
-
-    return {
-        "City": city,
-        "Original Rows": len(df),
-        "Removed Rows": int(outliers.sum()),
-        "Cleaned Rows": len(cleaned_df),
-    }
+# Cities
+CITIES = ["delhi", "faridabad", "gurugram"]
 
 
-def main():
-    results = []
+def clean_city_data(filepath, city_name):
 
-    for city, filename in CITIES.items():
-        result = clean_data(city, filename)
-        results.append(result)
-        print(result)
+    print(f"\nProcessing {city_name}...")
 
-    report = pd.DataFrame(results)
-    report.to_csv(OUTPUT_DIR / "cleaning_report.csv", index=False)
+    df = pd.read_csv(filepath)
 
-    print("\nData cleaning completed!")
+    # Convert timestamp
+    df["timestamp"] = pd.to_datetime(
+        df["timestamp"], errors="coerce"
+    )
+
+    df = df.dropna(subset=["timestamp"])
+
+    # Sort timestamps
+    df = df.sort_values("timestamp")
+
+    # Remove duplicate timestamps
+    df = df.drop_duplicates(
+        subset=["timestamp"], keep="first"
+    )
+
+    df = df.set_index("timestamp")
+
+    # Mark original records
+    df["data_source"] = "original"
+
+    # Create complete hourly index
+    full_index = pd.date_range(
+        start=df.index.min(),
+        end=df.index.max(),
+        freq="h"
+    )
+
+    df = df.reindex(full_index)
+
+    df.index.name = "timestamp"
+
+    # Mark inserted records
+    df["data_source"] = df["data_source"].fillna(
+        "inserted"
+    )
+
+    # Convert pollutants to numeric
+    for col in POLLUTANTS:
+
+        if col in df.columns:
+
+            df[col] = pd.to_numeric(
+                df[col], errors="coerce"
+            )
+
+            # Treat zero as missing
+            df.loc[df[col] == 0, col] = np.nan
+
+    # Flag outliers using IQR
+    df["is_outlier"] = False
+
+    for col in POLLUTANTS:
+
+        if col in df.columns:
+
+            q1 = df[col].quantile(0.25)
+            q3 = df[col].quantile(0.75)
+
+            iqr = q3 - q1
+
+            upper_limit = q3 + (1.5 * iqr)
+
+            df.loc[
+                df[col] > upper_limit,
+                "is_outlier"
+            ] = True
+
+    # Fill missing pollutant values
+    # Maximum 3 consecutive hours
+    for col in POLLUTANTS:
+
+        if col in df.columns:
+
+            df[col] = df[col].ffill(limit=3)
+
+    # Restore location information
+    for col in [
+        "location_name",
+        "location_lat",
+        "location_lon"
+    ]:
+
+        if col in df.columns:
+
+            df[col] = df[col].ffill().bfill()
+
+    # Update time-based features
+    df["hour"] = df.index.hour
+    df["day"] = df.index.day
+    df["month"] = df.index.month
+    df["year"] = df.index.year
+    df["day_of_week"] = df.index.dayofweek
+
+    df["is_weekend"] = (
+        df["day_of_week"] >= 5
+    ).astype(int)
+
+    return df
 
 
 if __name__ == "__main__":
-    main()
+
+    for city in CITIES:
+
+        raw_path = RAW_DIR / f"{city}_aqi_.csv"
+
+        if raw_path.exists():
+
+            cleaned_df = clean_city_data(
+                raw_path, city.title()
+            )
+
+            output_path = (
+                CLEANED_DIR / f"{city}_cleaned.csv"
+            )
+
+            cleaned_df.reset_index().to_csv(
+                output_path, index=False
+            )
+
+            print(f"Saved: {output_path}")
+
+            print(
+                f"Total records: {len(cleaned_df)}"
+            )
+
+            print(
+                f"Inserted records: "
+                f"{(cleaned_df['data_source'] == 'inserted').sum()}"
+            )
+
+        else:
+
+            print(f"File not found: {raw_path}")
+
+    print("\nData cleaning completed!")
