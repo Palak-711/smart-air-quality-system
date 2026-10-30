@@ -1,0 +1,324 @@
+{
+  "task": "15- and 30-minute-ahead AQI forecast trained on SIMULATED 15-minute data (derived from real hourly data)",
+  "SIMULATED_DATA": true,
+  "step_minutes": 15,
+  "window_steps": 24,
+  "horizons_minutes": [
+    15,
+    30
+  ],
+  "min_history_steps": 119,
+  "origin": "top of the hour (minute 00)",
+  "features": [
+    "pm25",
+    "pm10",
+    "no2",
+    "o3",
+    "co",
+    "so2",
+    "aqi",
+    "aqi_roll4",
+    "aqi_roll12",
+    "aqi_roll24",
+    "aqi_roll96",
+    "pm25_roll4",
+    "pm25_roll12",
+    "pm25_roll24",
+    "pm25_roll96",
+    "aqi_diff1",
+    "aqi_diff4",
+    "tod_sin",
+    "tod_cos",
+    "dow_sin",
+    "dow_cos",
+    "doy_sin",
+    "doy_cos",
+    "is_weekend",
+    "city_Delhi",
+    "city_Faridabad",
+    "city_Gurugram"
+  ],
+  "split": {
+    "train_end_exclusive": "2023-05-27 00:00:00",
+    "val_end_exclusive": "2023-09-13 12:00:00",
+    "n_train": 36591,
+    "n_val": 7876,
+    "n_test": 7878
+  },
+  "best_epoch": 8,
+  "metrics": {
+    "n_test_total": 7869,
+    "n_test_compared": 7869,
+    "horizons": {
+      "15min": {
+        "Persistence": {
+          "overall": {
+            "MAE": 19.46,
+            "RMSE": 24.568,
+            "R2": 0.8177,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 19.426,
+            "RMSE": 24.641,
+            "R2": 0.8196,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 19.618,
+            "RMSE": 24.688,
+            "R2": 0.8187,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 19.336,
+            "RMSE": 24.374,
+            "R2": 0.8145,
+            "n": 2623
+          }
+        },
+        "Ridge": {
+          "overall": {
+            "MAE": 16.908,
+            "RMSE": 21.081,
+            "R2": 0.8658,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 16.813,
+            "RMSE": 20.983,
+            "R2": 0.8692,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 17.188,
+            "RMSE": 21.377,
+            "R2": 0.8641,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 16.724,
+            "RMSE": 20.881,
+            "R2": 0.8638,
+            "n": 2623
+          }
+        },
+        "Interpolation (hourly Bi-LSTM)": {
+          "overall": {
+            "MAE": 16.851,
+            "RMSE": 21.071,
+            "R2": 0.8659,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 16.759,
+            "RMSE": 20.959,
+            "R2": 0.8695,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 17.116,
+            "RMSE": 21.376,
+            "R2": 0.8641,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 16.68,
+            "RMSE": 20.875,
+            "R2": 0.8639,
+            "n": 2623
+          }
+        },
+        "Bi-LSTM 15/30 (ours)": {
+          "overall": {
+            "MAE": 17.046,
+            "RMSE": 21.243,
+            "R2": 0.8637,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 16.945,
+            "RMSE": 21.19,
+            "R2": 0.8666,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 17.276,
+            "RMSE": 21.509,
+            "R2": 0.8624,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 16.916,
+            "RMSE": 21.027,
+            "R2": 0.8619,
+            "n": 2623
+          }
+        },
+        "Oracle interpolation (uses next real hour)": {
+          "overall": {
+            "MAE": 13.722,
+            "RMSE": 17.232,
+            "R2": 0.9103,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 13.679,
+            "RMSE": 17.101,
+            "R2": 0.9131,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 13.711,
+            "RMSE": 17.218,
+            "R2": 0.9118,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 13.776,
+            "RMSE": 17.377,
+            "R2": 0.9057,
+            "n": 2623
+          }
+        }
+      },
+      "30min": {
+        "Persistence": {
+          "overall": {
+            "MAE": 31.959,
+            "RMSE": 40.227,
+            "R2": 0.475,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 32.383,
+            "RMSE": 41.0,
+            "R2": 0.469,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 31.784,
+            "RMSE": 39.799,
+            "R2": 0.4924,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 31.709,
+            "RMSE": 39.87,
+            "R2": 0.463,
+            "n": 2623
+          }
+        },
+        "Ridge": {
+          "overall": {
+            "MAE": 25.431,
+            "RMSE": 31.595,
+            "R2": 0.6761,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 25.541,
+            "RMSE": 31.936,
+            "R2": 0.6778,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 25.59,
+            "RMSE": 31.643,
+            "R2": 0.6791,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 25.161,
+            "RMSE": 31.2,
+            "R2": 0.6712,
+            "n": 2623
+          }
+        },
+        "Interpolation (hourly Bi-LSTM)": {
+          "overall": {
+            "MAE": 25.341,
+            "RMSE": 31.639,
+            "R2": 0.6752,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 25.401,
+            "RMSE": 31.969,
+            "R2": 0.6771,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 25.483,
+            "RMSE": 31.688,
+            "R2": 0.6782,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 25.139,
+            "RMSE": 31.255,
+            "R2": 0.67,
+            "n": 2623
+          }
+        },
+        "Bi-LSTM 15/30 (ours)": {
+          "overall": {
+            "MAE": 25.44,
+            "RMSE": 31.599,
+            "R2": 0.6761,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 25.624,
+            "RMSE": 31.981,
+            "R2": 0.6769,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 25.582,
+            "RMSE": 31.659,
+            "R2": 0.6788,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 25.113,
+            "RMSE": 31.151,
+            "R2": 0.6722,
+            "n": 2623
+          }
+        },
+        "Oracle interpolation (uses next real hour)": {
+          "overall": {
+            "MAE": 15.923,
+            "RMSE": 20.041,
+            "R2": 0.8697,
+            "n": 7869
+          },
+          "Delhi": {
+            "MAE": 16.05,
+            "RMSE": 20.297,
+            "R2": 0.8699,
+            "n": 2623
+          },
+          "Faridabad": {
+            "MAE": 15.802,
+            "RMSE": 19.799,
+            "R2": 0.8744,
+            "n": 2623
+          },
+          "Gurugram": {
+            "MAE": 15.917,
+            "RMSE": 20.024,
+            "R2": 0.8645,
+            "n": 2623
+          }
+        }
+      }
+    }
+  },
+  "versions": {
+    "tensorflow": "2.21.0",
+    "keras": "3.15.1",
+    "scikit_learn": "1.8.0"
+  }
+}
