@@ -31,8 +31,8 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.linear_model import Ridge
 
 from aqi_common import CITIES, TARGET, build_features, feature_names, OPTIONAL_WEATHER
-from train_bilstm import find_city_file, make_windows, score_by_city, set_seeds
-
+from train_bilstm import make_windows, score_by_city, set_seeds
+from aqi_common import find_city_file
 
 def main() -> None:
     ap = argparse.ArgumentParser()
