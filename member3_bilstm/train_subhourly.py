@@ -28,7 +28,8 @@ from sklearn.preprocessing import StandardScaler
 
 from aqi_common import CITIES, TARGET, build_features, feature_names
 from subhourly import (HORIZON_STEPS, MAX_ROLL_STEPS, STEP_MIN, build_features_15min, feature_names_15min, simulate_15min)
-from train_bilstm import find_city_file, make_windows, score, score_by_city, set_seeds
+from train_bilstm import make_windows, score, score_by_city, set_seeds
+from aqi_common import find_city_file
 
 MODEL_FILE, SCALER_FILE, META_FILE = "bilstm_aqi_15_30min.keras", "bilstm_aqi_15_30min_scaler.joblib", "bilstm_aqi_15_30min_metadata.json"
 
