@@ -29,7 +29,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 
 from aqi_common import CITIES, POLLUTANTS, TARGET, build_features, feature_names
-from train_bilstm import find_city_file, make_windows
+from train_bilstm import make_windows
+from aqi_common import find_city_file
 
 SEED = 42
 
