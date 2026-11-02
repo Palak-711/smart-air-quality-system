@@ -21,6 +21,11 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from fastapi import FastAPI, Header, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -163,3 +168,22 @@ def get_log(limit: int = Query(50, ge=1, le=500), city: Optional[str] = None):
 _dash = ROOT / "dashboard"
 if _dash.is_dir():                                      # mounted LAST so /api/* keeps priority
     app.mount("/", StaticFiles(directory=_dash, html=True), name="dashboard")
+
+
+
+app = FastAPI(title="Smart Air Quality System API")
+
+# Restrict CORS origins (replace '*' with explicit domains)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:8000"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+
+API_KEY_SECRET = "secure_smart_aqi_key_2026"
+
+def verify_api_key(x_api_key: str = Header(...)):
+    if x_api_key != API_KEY_SECRET:
+        raise HTTPException(status_code=401, detail="Invalid API Key authentication")
