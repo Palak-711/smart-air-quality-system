@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 
 from inference import predict_next_hour_aqi, get_forecaster
-from train_bilstm import find_city_file
+from aqi_common import find_city_file
 from aqi_common import CITIES
 
 
