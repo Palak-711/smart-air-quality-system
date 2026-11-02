@@ -122,3 +122,23 @@ def build_features(df: pd.DataFrame, city: str, extra_cols=()) -> tuple[pd.DataF
 
     all_features, _ = feature_names(extra_cols)
     return f[all_features], imputed
+from pathlib import Path
+
+def find_city_file(city_name: str, data_dir: Path | str = "data") -> Path:
+    """Recursively finds clean/calibrated CSV datasets for a given city."""
+    base_dir = Path(data_dir)
+    
+    # Target cleaned directory if generic 'data' root is supplied
+    if base_dir.name == "data" and (base_dir / "cleaned").exists():
+        base_dir = base_dir / "cleaned"
+
+    # Search recursively for matching city CSV files
+    pattern = f"*{city_name}*.csv"
+    matches = list(base_dir.rglob(pattern))
+
+    if not matches:
+        raise FileNotFoundError(f"No CSV matching '{city_name}' found under {base_dir}")
+
+    # Prioritize calibrated files over standard raw/cleaned files
+    matches.sort(key=lambda p: ("calibrated" not in p.name.lower(), p.name))
+    return matches[0]
