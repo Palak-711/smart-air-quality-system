@@ -27,7 +27,7 @@ import os
 import random
 import time
 from pathlib import Path
-
+from aqi_common import find_city_file
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 
 import joblib
@@ -45,14 +45,6 @@ META_FILE = "bilstm_aqi_metadata.json"
 
 
 # --------------------------------------------------------------------------- data
-def find_city_file(data_dir: Path, city: str) -> Path:
-    """Pick the CSV for a city by filename (prefers files containing 'calibrated')."""
-    prefixes = [city.lower()] + (["gurgaon"] if city == "Gurugram" else [])
-    cands = [p for p in data_dir.glob("*.csv") if any(p.name.lower().startswith(x) for x in prefixes)]
-    if not cands:
-        raise FileNotFoundError(f"No CSV starting with '{city.lower()}' found in {data_dir}")
-    cands.sort(key=lambda p: ("calibrated" not in p.name.lower(), p.name))
-    return cands[0]
 
 
 def set_seeds(seed: int) -> None:
