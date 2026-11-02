@@ -10,7 +10,7 @@ inference.py  --  next-hour AQI prediction for FastAPI (Member 5)
 
 `history` = the most recent HOURLY readings for that city, as a DataFrame or a list
 of dicts (e.g. a parsed JSON body) with columns:
-    timestamp, pm25, pm10, no2, o3, co, so2, aqi   (+ temperature, humidity if the
+    timestamp, pm25, pm10, no2, o3, co, so2, aqi  (+ temperature, humidity if the
     model was trained with them -- see models/bilstm_aqi_metadata.json "extra_cols")
 At least `min_history_hours` (47 by default) consecutive hours are needed: 24 for
 the model window plus 23 so the 24-hour rolling features are fully warmed up, exactly
@@ -42,7 +42,22 @@ class AQIForecaster:
         model_dir = Path(model_dir or os.environ.get("AQI_MODEL_DIR") or Path(__file__).resolve().parent / "models")
         from tensorflow import keras  # imported lazily: keeps `import inference` cheap
 
-        self.model = keras.models.load_model(model_dir / MODEL_FILE, compile=False)
+        # Fix Finding #10: Explicit custom_objects dictionary and safe_mode for Keras 3.x compatibility
+        custom_objects: dict[str, object] = {
+            # Add any custom layers or loss functions here if defined in training
+        }
+        
+        model_path = model_dir / MODEL_FILE
+        try:
+            self.model = keras.models.load_model(
+                model_path, 
+                custom_objects=custom_objects, 
+                compile=False,
+                safe_mode=False
+            )
+        except Exception as e:
+            raise RuntimeError(f"Failed to load Keras model from {model_path}: {e}")
+
         bundle = joblib.load(model_dir / SCALER_FILE)
         meta = json.loads((model_dir / META_FILE).read_text())
         self.scaler = bundle["feature_scaler"]
