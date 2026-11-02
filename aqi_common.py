@@ -72,22 +72,24 @@ def feature_names(extra_cols=()) -> tuple[list[str], list[str]]:
     return continuous + cyclical + city_cols, continuous
 
 
-def regularize_hourly(df: pd.DataFrame, value_cols: list[str]) -> tuple[pd.DataFrame, pd.Series]:
-    """Put a city's data on a strict hourly grid.
+# NEW (Fixed: treats AQI <= 0 and PM2.5 <= 0 dropouts as NaN)
+def regularize_hourly(df: pd.DataFrame) -> pd.DataFrame:
+    """Regularize raw data to strict 1-hour frequency and treat drop-outs as missing."""
+    df = df.copy()
+    
+    # Treat drop-out zeros as missing (NaN)
+    if 'aqi' in df.columns:
+        df.loc[df['aqi'] <= 0, 'aqi'] = np.nan
+    if 'pm25' in df.columns:
+        df.loc[df['pm25'] <= 0, 'pm25'] = np.nan
+    if 'pm2.5' in df.columns:
+        df.loc[df['pm2.5'] <= 0, 'pm2.5'] = np.nan
 
-    Returns (frame, imputed_mask). `imputed_mask` is True for any hour that was
-    missing (or had NaNs) in the raw data; those hours are forward-filled (causal)
-    for up to MAX_FFILL hours, and are never used as prediction targets.
-    """
-    d = df.copy()
-    d["timestamp"] = pd.to_datetime(d["timestamp"])
-    d = d.sort_values("timestamp").drop_duplicates("timestamp", keep="last").set_index("timestamp")
-    full = pd.date_range(d.index.min(), d.index.max(), freq="h")
-    d = d.reindex(full)
-    imputed = d[value_cols].isna().any(axis=1)
-    d[value_cols] = d[value_cols].astype(float).ffill(limit=MAX_FFILL)
-    d.index.name = "timestamp"
-    return d, imputed
+    # Resample to hourly and forward-fill short gaps
+    df = df.set_index('timestamp').resample('1h').mean()
+    df = df.ffill(limit=3)
+    
+    return df
 
 
 def build_features(df: pd.DataFrame, city: str, extra_cols=()) -> tuple[pd.DataFrame, pd.Series]:
