@@ -37,28 +37,49 @@ if str(ROOT) not in sys.path:          # so `import aqi_common` / `import infere
     sys.path.insert(0, str(ROOT))
 
 from aqi_common import CITIES, aqi_category, normalize_city      # noqa: E402
-from api import rules                                             # noqa: E402
+from api import rules                                              # noqa: E402
 
 POLLUTANTS = ["pm25", "pm10", "no2", "o3", "co", "so2"]
 HISTORY_LEN = 96           # rows kept per city (>= 47 needed by the model)
 SEED_ROWS = 72
 CHART_POINTS = 24
 
-# --- PM2.5 -> AQI mapping, measured on the project dataset (binned means of aqi vs pm25) ----------
-# The dataset's AQI is a piecewise-linear function of PM2.5 (corr = 0.96), so we reuse that mapping
-# for sensor readings. Above 170 ug/m3 the dataset has no samples: extrapolated CPCB-style.
-_PM = [0, 2.7, 7.6, 12.6, 17.6, 22.5, 27.5, 32.5, 37.5, 42.5, 47.5, 52.5, 57.5, 62.5, 67.5,
-       74.8, 84.8, 94.6, 107.5, 126.4, 146.0, 170.0, 250.0, 350.0, 500.0]
-_AQI = [0, 11.3, 31.7, 51.1, 62.7, 73.1, 83.5, 94.0, 111.4, 136.2, 161.0, 185.8, 203.1, 208.4,
-        213.6, 221.2, 231.7, 241.9, 255.3, 275.0, 295.6, 305.0, 400.0, 450.0, 500.0]
 
-
+# --- Official CPCB PM2.5 -> AQI Sub-index Mapping (Fix Finding #9) --------------------------
 def pm25_to_aqi(pm25: float) -> float:
-    return float(np.interp(pm25, _PM, _AQI))
+    """Calculates official CPCB AQI sub-index for PM2.5 concentration in ug/m3."""
+    if pm25 <= 0:
+        return 0.0
+    elif pm25 <= 30:
+        return (50.0 / 30.0) * pm25
+    elif pm25 <= 60:
+        return 50.0 + (50.0 / 30.0) * (pm25 - 30.0)
+    elif pm25 <= 90:
+        return 100.0 + (100.0 / 30.0) * (pm25 - 60.0)
+    elif pm25 <= 120:
+        return 200.0 + (100.0 / 30.0) * (pm25 - 90.0)
+    elif pm25 <= 250:
+        return 300.0 + (100.0 / 130.0) * (pm25 - 120.0)
+    else:
+        return 400.0 + (100.0 / 130.0) * min(pm25 - 250.0, 130.0)
 
 
 def aqi_to_pm25(aqi: float) -> float:
-    return float(np.interp(aqi, _AQI, _PM))
+    """Inverts CPCB sub-index formula to return estimated PM2.5 in ug/m3."""
+    if aqi <= 0:
+        return 0.0
+    elif aqi <= 50:
+        return (30.0 / 50.0) * aqi
+    elif aqi <= 100:
+        return 30.0 + (30.0 / 50.0) * (aqi - 50.0)
+    elif aqi <= 200:
+        return 60.0 + (30.0 / 100.0) * (aqi - 100.0)
+    elif aqi <= 300:
+        return 90.0 + (30.0 / 100.0) * (aqi - 200.0)
+    elif aqi <= 400:
+        return 120.0 + (130.0 / 100.0) * (aqi - 300.0)
+    else:
+        return 250.0 + (130.0 / 100.0) * min(aqi - 400.0, 100.0)
 
 
 ADVISORY = {
@@ -239,7 +260,7 @@ class Engine:
                 pm25 = aqi_to_pm25(raw_aqi)
             else:
                 pm25 = float(np.clip(reading["pm25"], 0, 500))
-                raw_aqi = pm25_to_aqi(pm25)          # dataset AQI is derived from RAW pm25
+                raw_aqi = pm25_to_aqi(pm25)          # Uses CPCB mapping for raw pm25
 
             raw = {"pm25": pm25,
                    "pm10": float(reading["pm10"]) if reading.get("pm10") is not None else pm25 * 1.5,
