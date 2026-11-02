@@ -9,8 +9,10 @@ reach `localhost`. So both sides meet on a PUBLIC broker (default: broker.hivemq
 
 !! A public broker is shared by everybody. Use a UNIQUE topic prefix (set MQTT_PREFIX) or you will
 !! receive other people's messages. Never publish anything private.
-"""
+""" 
 from __future__ import annotations
+import sys
+import logging
 
 import json
 import os
@@ -120,3 +122,10 @@ class MqttBridge:
         return {"enabled": self.client is not None, "connected": self.connected, "broker": self.broker,
                 "telemetry_topic": self.t_telemetry, "control_topic": self.t_control,
                 "error": self.last_error}
+
+MQTT_TOPIC_PREFIX = "smartaqi/CHANGE_ME_team42"
+
+def start_mqtt_bridge():
+    if "CHANGE_ME" in MQTT_TOPIC_PREFIX:
+        logging.error("SECURITY RISK: Default MQTT prefix detected! Refusing to start bridge.")
+        raise ValueError("Please set a unique MQTT_TOPIC_PREFIX before running in production.")
